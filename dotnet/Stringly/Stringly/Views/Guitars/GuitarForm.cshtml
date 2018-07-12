@@ -1,0 +1,69 @@
+﻿@model Stringly.ViewModels.GuitarFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Guitar</h2>
+
+@using (Html.BeginForm("Save", "Guitars"))
+{
+    <div>
+        @if (Model.Guitar != null)
+        {
+            if (Model.Error == true)
+            {
+                <div class="alert alert-danger" role="alert">Oops something went wrong check your parameters again.</div>
+            }
+        }
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Guitar.Name)
+        @Html.TextBoxFor(m => m.Guitar.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Guitar.Name)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Guitar.Price)
+        @Html.TextBoxFor(m => m.Guitar.Price, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Guitar.Price)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Guitar.ImageURL)
+        @Html.TextBoxFor(m => m.Guitar.ImageURL, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Guitar.ImageURL)
+        @if (Model.Guitar != null)
+        {
+            if (!Model.Guitar.ImageURL.IsEmpty())
+            {
+                <br /><img src=@Model.Guitar.ImageURL class="img-thumbnail" alt="Missing image" /><br />
+            }
+        }
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Guitar.Description)
+        @Html.TextAreaFor(m => m.Guitar.Description, new { @class = "form-control", @rows = "5" })
+    </div>
+
+    <div class="form-group">
+
+        @if (Model.Guitar != null)
+        {
+            @Html.LabelFor(m => m.Guitar.SKU)
+            <h5>@Model.Guitar.SKU</h5>
+        }
+    </div>
+
+    @Html.HiddenFor(m => m.Guitar.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Save</button>
+}
+
+@* Client-Side validation *@
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
